@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Todo App</title>
+    <link href="#" rel="shortcut icon">
+    <link
+            crossorigin="anonymous"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+            integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
+            rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{Common/header :: header}"></div>
+<div>
+    <div style="display: flex;height:30vh ;justify-content: center;align-items: flex-end">
+        <div>
+            <h1>Welcome to To-Do Application</h1>
+        </div>
+    </div>
+    <div style="display: flex; justify-content: center;margin:10px">
+        <div style="margin:10px">
+            <a th:href="@{/todo}">
+                <button class="btn btn-outline-primary" type="button">View all To-Dos</button>
+            </a>
+        </div>
+        <div style="margin:10px">
+            <a th:href="@{/create}">
+                <button class="btn btn-outline-primary" type="button">Create new To-Dos</button>
+            </a>
+        </div>
+    </div>
+</div>
+<div class="footer" th:replace="~{Common/footer :: footer}"></div>
+</body>
+</html>
+
+
+

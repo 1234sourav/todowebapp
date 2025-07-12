@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Todo App</title>
+    <link href="#" rel="shortcut icon">
+    <link
+            crossorigin="anonymous"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+            integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
+            rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{Common/header :: header}"></div>
+<section class="vh-100">
+    <div class="container h-80">
+        <div
+                class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-md-6">
+                <h1 class="mb-4 text-center">Create Todo</h1>
+                <form class="card" method="post" role="form"
+                      style="border-radius: 15px;" th:action="@{/todo}" th:object="${todos}">
+                    <div class="card-body">
+                        <div class="row align-items-center pt-4 pb-3">
+                            <div class="col-md-3 ps-5">
+                                <h6 class="mb-0">Task</h6>
+                            </div>
+                            <div class="col-md-9 pe-5">
+     <textarea class="form-control" cols="25" rows="2"
+               th:field="*{task}"></textarea>
+                                <div class="text-danger mt-1" th:errors="*{task}"
+                                     th:if="${#fields.hasErrors('task')}"></div>
+                            </div>
+                        </div>
+                        <hr class="mx-n3">
+                        <div class="row align-items-center py-3">
+                            <div class="col-md-3 ps-5">
+                                <h6 class="mb-0">Status</h6>
+                            </div>
+                            <div class="col-md-9 pe-5">
+                                <select class="form-control" th:field="*{status}">
+                                    <option th:each="s : ${status}" th:text="${s}" th:value="${s}"></option>
+                                </select>
+                                <div class="text-danger mt-1"
+                                     th:errors="*{status}" th:if="${#fields.hasErrors('status')}"></div>
+                            </div>
+                        </div>
+                        <hr class="mx-n3">
+                        <div class="row align-items-center py-3">
+                            <div class="col-md-3 ps-5">
+                                <h6 class="mb-0">Due date</h6>
+                            </div>
+                            <div class="col-md-9 pe-5">
+                                <input class="form-control" th:field="*{dueDate}" type="date">
+                                <div class="text-danger mt-1"
+                                     th:errors="*{dueDate}" th:if="${#fields.hasErrors('dueDate')}"></div>
+                            </div>
+                        </div>
+                        <hr class="mx-n3">
+                        <div class="px-5 py-2">
+                            <button class="btn btn-primary btn-lg w-100" type="submit">Create</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<div th:replace="~{Common/footer :: footer}"></div>
+</body>
+</html>
