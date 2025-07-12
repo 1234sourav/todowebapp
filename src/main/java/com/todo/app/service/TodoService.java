@@ -27,7 +27,7 @@ public class TodoService {
         if (todoOptional.isPresent()) {
             return todoOptional.get();
         } else {
-            throw new TodoException("Todo Not Found");
+            throw new TodoException("Todo Not Found!");
         }
     }
 
