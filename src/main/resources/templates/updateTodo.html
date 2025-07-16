@@ -17,7 +17,8 @@
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-md-6">
                 <h1 class="mb-4 text-center">Update Todo</h1>
-                <form class="card" method="post" role="form" style="border-radius: 15px;" th:action="@{/edit/{id}(id=${todo.todo_id})}"
+                <form class="card" method="post" role="form" style="border-radius: 15px;"
+                      th:action="@{/edit/{id}(id=${todo.todo_id})}"
                       th:object="${todo}">
                     <div class="card-body">
                         <div class="row align-items-center pt-4 pb-3">

@@ -29,8 +29,8 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="todos : ${todoPage.content}">
-            <td th:text="${todos.todo_id}"></td>
+        <tr th:each="todos , iterStat: ${todoPage.content}">
+            <td th:text="${iterStat.index + 1}"></td>
             <td class="text-wrap" th:text="${todos.task}"></td>
             <td th:text="${todos.status}"></td>
             <td th:text="${todos.dueDate}"></td>

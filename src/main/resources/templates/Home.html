@@ -14,9 +14,14 @@
 <div th:replace="~{Common/header :: header}"></div>
 <div>
     <div style="display: flex;height:30vh ;justify-content: center;align-items: flex-end">
-        <div>
-            <h1>Welcome to To-Do Application</h1>
-        </div>
+        <h1>
+    <span th:if="${#authorization.expression('isAuthenticated()')}">
+        Welcome <span th:text="${#authentication.name}"></span> to To-Do Application
+    </span>
+            <span th:if="${!#authorization.expression('isAuthenticated()')}">
+        Welcome to To-Do Application
+    </span>
+        </h1>
     </div>
     <div style="display: flex; justify-content: center;margin:10px">
         <div style="margin:10px">

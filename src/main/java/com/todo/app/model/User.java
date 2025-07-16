@@ -3,6 +3,7 @@ package com.todo.app.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
@@ -14,14 +15,35 @@ public class User {
     private int userid;
 
     @NotEmpty(message = "Username cannot be empty")
+    @Size(min = 3, message = "Username cannot be less than 3 characters")
     private String username;
 
     @NotEmpty(message = "Useremail cannot be empty")
     @Email(message = "Invalid email format")
     private String useremail;
 
+    @NotEmpty(message = "Userpassword cannot be empty")
+    @Size(min = 6, message = "Userpassword must be at least 6 characters long")
+    private String userpassword;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Todo> todos;
+
+    public User(int userid, String username, String useremail, String userpassword, List<Todo> todos) {
+        this.userid = userid;
+        this.username = username;
+        this.useremail = useremail;
+        this.userpassword = userpassword;
+        this.todos = todos;
+    }
+
+    public String getUserpassword() {
+        return userpassword;
+    }
+
+    public void setUserpassword(String userpassword) {
+        this.userpassword = userpassword;
+    }
 
     public int getUserid() {
         return userid;

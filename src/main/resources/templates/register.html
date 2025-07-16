@@ -19,27 +19,34 @@
                 <div class="card border border-light-subtle rounded-3 shadow-sm">
                     <div class="card-body p-3 p-md-4 p-xl-5">
                         <h2 class="h3 text-center">Registration</h2>
-                        <form action="#!">
+                        <form th:action="@{/register}" th:object="${user}" method="post">
                             <div class="row gy-2 overflow-hidden">
                                 <div class="col-12">
                                     <div class="form-floating mb-3">
-                                        <input class="form-control" id="username" name="username"
-                                               placeholder="" required type="text">
+                                        <input th:field="*{username}" class="form-control" id="username" name="username"
+                                               placeholder="">
                                         <label class="form-label" for="username">Username</label>
+                                        <div class="text-danger mt-1" th:errors="*{username}"
+                                             th:if="${#fields.hasErrors('username')}"></div>
                                     </div>
                                 </div>
                                 <div class="col-12">
                                     <div class="form-floating mb-3">
-                                        <input class="form-control" id="email" name="email"
-                                               placeholder="name@example.com" required type="email">
+                                        <input th:field="*{useremail}" class="form-control" id="email" name="email"
+                                               placeholder="name@example.com">
                                         <label class="form-label" for="email">Email</label>
+                                        <div class="text-danger mt-1" th:errors="*{useremail}"
+                                             th:if="${#fields.hasErrors('useremail')}"></div>
                                     </div>
                                 </div>
                                 <div class="col-12">
                                     <div class="form-floating mb-3">
-                                        <input class="form-control" id="password" name="password"
-                                               placeholder="Password" required type="password" value="">
+                                        <input th:field="*{userpassword}" class="form-control" id="password"
+                                               name="password"
+                                               placeholder="Password" type="password" value="">
                                         <label class="form-label" for="password">Password</label>
+                                        <div class="text-danger mt-1" th:errors="*{userpassword}"
+                                             th:if="${#fields.hasErrors('userpassword')}"></div>
                                     </div>
                                 </div>
                                 <div class="col-12">

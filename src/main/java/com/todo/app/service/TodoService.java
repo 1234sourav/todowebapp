@@ -2,14 +2,15 @@ package com.todo.app.service;
 
 import com.todo.app.exception.TodoException;
 import com.todo.app.model.Todo;
+import com.todo.app.model.User;
 import com.todo.app.repository.TodoRepository;
+import com.todo.app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class TodoService {
@@ -17,47 +18,63 @@ public class TodoService {
     @Autowired
     TodoRepository todoRepository;
 
-    public Page<Todo> getPaginatedTodos(int page, int size) {
+    @Autowired
+    UserRepository userRepository;
+
+    public Page<Todo> getPaginatedTodos(String username, int page, int size) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new RuntimeException("User not found");
+        }
+
         Pageable pageable = PageRequest.of(page, size);
-        return todoRepository.findAll(pageable);
+        return todoRepository.findByUser(user, pageable);
     }
 
     public Todo getTodoById(Integer id) throws TodoException {
-        Optional<Todo> todoOptional = todoRepository.findById(id);
-        if (todoOptional.isPresent()) {
-            return todoOptional.get();
-        } else {
-            throw new TodoException("Todo Not Found!");
-        }
+        return todoRepository.findById(id)
+                .orElseThrow(() -> new TodoException("Todo Not Found!"));
     }
 
     public Todo createTodo(Todo todo) {
-        Todo t = todoRepository.save(todo);
-        return t;
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new RuntimeException("User not found");
+        }
+
+        todo.setUser(user);
+        return todoRepository.save(todo);
     }
 
     public Todo updateTodo(int id, Todo todo) throws TodoException {
-        if (todoRepository.findById(id).isPresent()) {
-            Todo newTodo = todoRepository.findById(id).get();
-            newTodo.setTask(todo.getTask());
-            newTodo.setStatus(todo.getStatus());
-            newTodo.setDueDate(todo.getDueDate());
-            Todo updatedTodo = todoRepository.save(newTodo);
-            return updatedTodo;
-        } else {
-            throw new TodoException("Todo Not Found");
+        Todo existingTodo = todoRepository.findById(id)
+                .orElseThrow(() -> new TodoException("Todo Not Found"));
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        if (!existingTodo.getUser().getUsername().equals(username)) {
+            throw new TodoException("Access denied: You do not own this todo");
         }
+
+        existingTodo.setTask(todo.getTask());
+        existingTodo.setStatus(todo.getStatus());
+        existingTodo.setDueDate(todo.getDueDate());
+
+        return todoRepository.save(existingTodo);
     }
 
     public String deleteTodo(Integer id) throws TodoException {
-        Optional<Todo> tudoOptional = todoRepository.findById(id);
+        Todo todo = todoRepository.findById(id)
+                .orElseThrow(() -> new TodoException("Todo Not Found"));
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        if (tudoOptional.isPresent()) {
-            todoRepository.deleteById(id);
-            return "Deleted Successfully";
-        } else {
-            throw new TodoException("Todo Not Found");
+        if (!todo.getUser().getUsername().equals(username)) {
+            throw new TodoException("Access denied: You do not own this todo");
         }
+        todoRepository.delete(todo);
+        return "Deleted Successfully";
     }
 }
 
